@@ -9,17 +9,38 @@
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Lobster+Two:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./assets/css/main.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css"
+    integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
 </head>
 
-<body>
-
-  <form action="">
-    <input type="text" class=" inputName js-input" placeholder="Búsqueda series de TV">
-    <input type="button" class="inputButton js-button" value="Buscar">
-  </form>
-  <section class="section js-shows">Mis series favoritas</section>
+<body class="styleback">
 
 
+  <header>
+    <form action="" class="form js-form">
+      <input type="text" class=" inputName js-input" placeholder="Búsqueda series de TV">
+      <input type="button" class=" inputButton js-button" value="search">
+    </form>
+  </header>
+  <div class="wrap">
+    <div class="container1">
+      <span class="title">Series</span>
+      <section class="section js-shows"></section>
+    </div>
+    <div class="container2">
+      <span class="title">Mis series favoritas</span>
+      <section class="favourite-section js-favourite--shows"></section>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+  </div>
   <script src="./assets/js/main.js"></script>
 </body>
 

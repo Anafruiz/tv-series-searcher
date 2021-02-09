@@ -3,6 +3,7 @@
 const buttonElement = document.querySelector(".js-button");
 const inputElement = document.querySelector(".js-input");
 const nameElement = document.querySelector(".js-shows");
+const formElement = document.querySelector(".js-form");
 
 //Cogemos los datos del Api, para ello tenemos que crear una constante con el valor del input para coger los datos del api dependiendo del titulo de la serie q introduzca la usuaria
 let showsList = [];
@@ -18,6 +19,11 @@ function getFromApi() {
       setInLocalStorage();
     });
 }
+function handleForm(ev) {
+  ev.preventDefault();
+}
+
+formElement.addEventListener("submit", handleForm);
 //Pintamos los datos, pero para conseguir los datos hay que iterar el array data para conseguir la propiedad que estamos buscando
 let imagenDefault = "https://via.placeholder.com/210x295/ffffff/666666/?";
 function paintElements(data) {
@@ -32,13 +38,13 @@ function paintElements(data) {
     showsList.push({ name: title, img: img, id: idData });
     //Pintamos los datos
     htmlCode += `<li class="show" data-myid=${idData} >`;
-    htmlCode += `<h2>Nombre:${title}</h2>`;
+    htmlCode += `<h2 class="title2">Nombre:${title}</h2>`;
     if (img === null) {
-      console.log(eachData.show.img);
-      htmlCode += `<img src="${imagenDefault}"> `;
+      htmlCode += `<img class="imgList" src="${imagenDefault}"> `;
     } else {
-      htmlCode += `<img src="${img.medium}"> `;
+      htmlCode += `<img class="imgList" src="${img.medium}"> `;
     }
+    htmlCode += `</li>`;
   }
   htmlCode += `</ul>`;
   nameElement.innerHTML += htmlCode;
@@ -70,10 +76,10 @@ function handleShows(ev) {
   });
   if (showFound === -1) {
     favouriteList.push(favouriteIndex);
-    console.log(favouriteList);
   } else {
     favouriteList.splice(showFound, 1);
   }
+
   setInLocalStorage();
   paintFavoritesShow();
 }
@@ -87,14 +93,18 @@ function paintFavoritesShow() {
   for (const item of favouriteList) {
     htmlCode += `<li class="favouriteShow">`;
     htmlCode += `<h2>Name:${item.name}</h2>`;
-    console.log(item);
-    htmlCode += `<img src="${item.img.medium}">`;
-    htmlCode += `</li>`;
-  }
-  htmlCode += `</ul>`;
-  favoriteElements.innerHTML = htmlCode;
-}
 
+    if (item.img === null) {
+      htmlCode += `<img src="${imagenDefault}">`;
+    } else {
+      htmlCode += `<img class="backstyle"src="${item.img.medium}">`;
+      /*       htmlCode += `<input type ="reset" class="js-reset" value="borrar">`;
+       */ htmlCode += `</li>`;
+    }
+    htmlCode += `</ul>`;
+    favoriteElements.innerHTML = htmlCode;
+  }
+}
 //Guardar listas de favoritos en el local storage
 function setInLocalStorage() {
   const stringfavourites = JSON.stringify(favouriteList);
@@ -112,3 +122,13 @@ function getFromLocalStorage() {
   paintFavoritesShow();
 }
 getFromLocalStorage();
+
+/* const resetElement = document.querySelector(".js-reset");
+function resetInfo() {
+  localStorage.clear("favourites");
+  const allInputsData = document.querySelectorAll(".favouriteShow");
+  for (const allInputsDataoff of allInputsData) {
+  }
+}
+resetElement.addEventListener("click", resetInfo);
+ */
