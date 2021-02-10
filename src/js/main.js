@@ -64,8 +64,7 @@ function handleShows(ev) {
   // obtengo el id de la serie clickada,para ello he tenido que añadir data-myid=${eachData.show.id}cuando he pintado el elemento, y aquí buscarlo de esa forma.
 
   const clickedId = parseInt(ev.currentTarget.dataset.myid);
-  /*   console.log(clickedId);
-   */
+
   //Quiero buscar solo el ID de mi showsList, para indicar q si es igual q mi elemento clickado lo vaya añadiendo al nuevo array(favouriteList)
 
   const favouriteIndex = showsList.find(function (item) {
@@ -83,6 +82,7 @@ function handleShows(ev) {
   setInLocalStorage();
   paintFavoritesShow();
 }
+
 const favoriteElements = document.querySelector(".js-favourite--shows");
 
 //Pintar series favoritas
@@ -93,7 +93,6 @@ function paintFavoritesShow() {
   for (const item of favouriteList) {
     htmlCode += `<li class="favouriteShow">`;
     htmlCode += `<h2>Name:${item.name}</h2>`;
-
     if (item.img === null) {
       htmlCode += `<img src="${imagenDefault}">`;
     } else {
