@@ -29,7 +29,7 @@ let imagenDefault = "https://via.placeholder.com/210x295/ffffff/666666/?";
 function paintElements(data) {
   let htmlCode = "";
   htmlCode += `<ul>`;
-
+  showsList = [];
   for (const eachData of data) {
     const title = eachData.show.name;
     const img = eachData.show.image;
@@ -47,7 +47,7 @@ function paintElements(data) {
     htmlCode += `</li>`;
   }
   htmlCode += `</ul>`;
-  nameElement.innerHTML += htmlCode;
+  nameElement.innerHTML = htmlCode;
 }
 
 //Escuchamos al botón para que al clickarlo, llame a la función que coge los datos del Api
@@ -100,9 +100,9 @@ function paintFavoritesShow() {
       /*       htmlCode += `<input type ="reset" class="js-reset" value="borrar">`;
        */ htmlCode += `</li>`;
     }
-    htmlCode += `</ul>`;
-    favoriteElements.innerHTML = htmlCode;
   }
+  htmlCode += `</ul>`;
+  favoriteElements.innerHTML = htmlCode;
 }
 //Guardar listas de favoritos en el local storage
 function setInLocalStorage() {
@@ -121,13 +121,3 @@ function getFromLocalStorage() {
   paintFavoritesShow();
 }
 getFromLocalStorage();
-
-/* const resetElement = document.querySelector(".js-reset");
-function resetInfo() {
-  localStorage.clear("favourites");
-  const allInputsData = document.querySelectorAll(".favouriteShow");
-  for (const allInputsDataoff of allInputsData) {
-  }
-}
-resetElement.addEventListener("click", resetInfo);
- */
