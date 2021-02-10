@@ -17,6 +17,7 @@ function getFromApi() {
       paintElements(data);
       listenShowsEvents();
       setInLocalStorage();
+      resetFavButton();
     });
 }
 function handleForm(ev) {
@@ -34,22 +35,44 @@ function paintElements(data) {
     const title = eachData.show.name;
     const img = eachData.show.image;
     const idData = eachData.show.id;
+    const dataElements = eachData.show;
     // Metemos los datos en mi nuevo array showsList
     showsList.push({ name: title, img: img, id: idData });
     //Pintamos los datos
-    htmlCode += `<li class="show" data-myid=${idData} >`;
+    //Primero, llamamos a la función para ver si la peli está en favorito. Si está en favoritos añadimos la clase del borde y si no está, no se la ponemos.
+
+    let favouriteClass;
+    if (isShowsFavourites(dataElements)) {
+      favouriteClass = "backstyle";
+    } else {
+      favouriteClass = "";
+    }
+    htmlCode += `<li class="show " data-myid=${idData} >`;
     htmlCode += `<h2 class="title2">Nombre:${title}</h2>`;
     if (img === null) {
-      htmlCode += `<img class="imgList" src="${imagenDefault}"> `;
+      htmlCode += `<img class="imgList  ${favouriteClass}" src="${imagenDefault}"> `;
     } else {
-      htmlCode += `<img class="imgList" src="${img.medium}"> `;
+      htmlCode += `<img class="imgList  ${favouriteClass}" src="${img.medium}"> `;
     }
+
     htmlCode += `</li>`;
   }
   htmlCode += `</ul>`;
   nameElement.innerHTML = htmlCode;
 }
 
+//Con esta función comprobamos si la serie está en favoritos y hacemos el favouriteClass de añadir o quitar la clase
+function isShowsFavourites(dataElements) {
+  const favoriteFound = favouriteList.find((favorite) => {
+    return favorite.id === dataElements.id;
+  });
+  console.log(favoriteFound);
+  if (favoriteFound === undefined) {
+    return false;
+  } else {
+    return true;
+  }
+}
 //Escuchamos al botón para que al clickarlo, llame a la función que coge los datos del Api
 buttonElement.addEventListener("click", getFromApi);
 
@@ -60,13 +83,12 @@ function listenShowsEvents(data) {
     element.addEventListener("click", handleShows);
   }
 }
+
 function handleShows(ev) {
   // obtengo el id de la serie clickada,para ello he tenido que añadir data-myid=${eachData.show.id}cuando he pintado el elemento, y aquí buscarlo de esa forma.
-
   const clickedId = parseInt(ev.currentTarget.dataset.myid);
 
   //Quiero buscar solo el ID de mi showsList, para indicar q si es igual q mi elemento clickado lo vaya añadiendo al nuevo array(favouriteList)
-
   const favouriteIndex = showsList.find(function (item) {
     return item.id === clickedId;
   });
@@ -89,9 +111,11 @@ const favoriteElements = document.querySelector(".js-favourite--shows");
 
 function paintFavoritesShow() {
   let htmlCode = "";
+  htmlCode += `<button class="js-reset">Reset <i class="fa fa-trash" aria-hidden="true"></i></button>`;
+
   htmlCode += `<ul>`;
   for (const item of favouriteList) {
-    htmlCode += `<li class="favouriteShow">`;
+    htmlCode += `<li class="favouriteShow" data-myid=${item.id} >`;
     htmlCode += `<h2>Name:${item.name}</h2>`;
     if (item.img === null) {
       htmlCode += `<img src="${imagenDefault}">`;
@@ -121,3 +145,11 @@ function getFromLocalStorage() {
   paintFavoritesShow();
 }
 getFromLocalStorage();
+//Boton de Reset para borrar la lista de favoritos.
+const resetButton = document.querySelector(".js-reset");
+
+function resetFavButton() {
+  favouriteList = [];
+  paintFavoritesShow();
+}
+resetButton.addEventListener("click", resetFavButton);
