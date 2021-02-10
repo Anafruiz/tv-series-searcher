@@ -14,8 +14,15 @@ function getFromApi() {
   fetch(`//api.tvmaze.com/search/shows?q=${titleName}`)
     .then((response) => response.json())
     .then((data) => {
-      paintElements(data);
-      listenShowsEvents();
+      showsList = [];
+      for (const eachData of data) {
+        const title = eachData.show.name;
+        const img = eachData.show.image;
+        const idData = eachData.show.id;
+        // Metemos los datos en mi nuevo array showsList
+        showsList.push({ name: title, img: img, id: idData });
+      }
+      paintElements();
       setInLocalStorage();
     });
 }
@@ -26,22 +33,19 @@ function handleForm(ev) {
 formElement.addEventListener("submit", handleForm);
 //Pintamos los datos, pero para conseguir los datos hay que iterar el array data para conseguir la propiedad que estamos buscando
 let imagenDefault = "https://via.placeholder.com/210x295/ffffff/666666/?";
-function paintElements(data) {
+function paintElements() {
   let htmlCode = "";
   htmlCode += `<ul>`;
-  showsList = [];
-  for (const eachData of data) {
-    const title = eachData.show.name;
-    const img = eachData.show.image;
-    const idData = eachData.show.id;
-    const dataElements = eachData.show;
+  for (const eachData of showsList) {
+    const title = eachData.name;
+    const img = eachData.img;
+    const idData = eachData.id;
     // Metemos los datos en mi nuevo array showsList
-    showsList.push({ name: title, img: img, id: idData });
     //Pintamos los datos
     //Primero, llamamos a la función para ver si la peli está en favorito. Si está en favoritos añadimos la clase del borde y si no está, no se la ponemos.
 
     let favouriteClass;
-    if (isShowsFavourites(dataElements)) {
+    if (isShowsFavourites(eachData)) {
       favouriteClass = "backstyle";
     } else {
       favouriteClass = "";
@@ -58,6 +62,7 @@ function paintElements(data) {
   }
   htmlCode += `</ul>`;
   nameElement.innerHTML = htmlCode;
+  listenShowsEvents();
 }
 
 //Con esta función comprobamos si la serie está en favoritos y hacemos el favouriteClass de añadir o quitar la clase
@@ -102,6 +107,7 @@ function handleShows(ev) {
 
   setInLocalStorage();
   paintFavoritesShow();
+  paintElements();
 }
 
 const favoriteElements = document.querySelector(".js-favourite--shows");
@@ -154,4 +160,5 @@ getFromLocalStorage();
 function resetFavButton() {
   favouriteList = [];
   paintFavoritesShow();
+  paintElements();
 }
