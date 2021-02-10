@@ -14,14 +14,7 @@ function getFromApi() {
   fetch(`//api.tvmaze.com/search/shows?q=${titleName}`)
     .then((response) => response.json())
     .then((data) => {
-      for (const eachData of data) {
-        const title = eachData.show.name;
-        const img = eachData.show.img;
-        const id = eachData.show.id;
-        showsList.push({ title, img, id });
-      }
-
-      paintElements();
+      paintElements(data);
       listenShowsEvents();
       setInLocalStorage();
     });
@@ -33,12 +26,11 @@ function handleForm(ev) {
 formElement.addEventListener("submit", handleForm);
 //Pintamos los datos, pero para conseguir los datos hay que iterar el array data para conseguir la propiedad que estamos buscando
 let imagenDefault = "https://via.placeholder.com/210x295/ffffff/666666/?";
-
-function paintElements() {
+function paintElements(data) {
   let htmlCode = "";
   htmlCode += `<ul>`;
   showsList = [];
-  /* for (const eachData of data) {
+  for (const eachData of data) {
     const title = eachData.show.name;
     const img = eachData.show.image;
     const idData = eachData.show.id;
@@ -47,22 +39,23 @@ function paintElements() {
     showsList.push({ name: title, img: img, id: idData });
     //Pintamos los datos
     //Primero, llamamos a la función para ver si la peli está en favorito. Si está en favoritos añadimos la clase del borde y si no está, no se la ponemos.
- */
-  let favouriteClass;
-  if (isShowsFavourites(showsList)) {
-    favouriteClass = "backstyle";
-  } else {
-    favouriteClass = "";
-  }
-  htmlCode += `<li class="show " data-myid=${showsList.id} >`;
-  htmlCode += `<h2 class="title2">Nombre:${showsList.title}</h2>`;
-  if (showsList.img === null) {
-    htmlCode += `<img class="imgList  ${favouriteClass}" src="${imagenDefault}"> `;
-  } else {
-    htmlCode += `<img class="imgList  ${favouriteClass}" src="${showsList.img}"> `;
-  }
 
-  htmlCode += `</li>`;
+    let favouriteClass;
+    if (isShowsFavourites(dataElements)) {
+      favouriteClass = "backstyle";
+    } else {
+      favouriteClass = "";
+    }
+    htmlCode += `<li class="show " data-myid=${idData} >`;
+    htmlCode += `<h2 class="title2">Nombre:${title}</h2>`;
+    if (img === null) {
+      htmlCode += `<img class="imgList  ${favouriteClass}" src="${imagenDefault}"> `;
+    } else {
+      htmlCode += `<img class="imgList  ${favouriteClass}" src="${img.medium}"> `;
+    }
+
+    htmlCode += `</li>`;
+  }
   htmlCode += `</ul>`;
   nameElement.innerHTML = htmlCode;
 }
@@ -121,6 +114,7 @@ function paintFavoritesShow() {
 
   htmlCode += `<ul>`;
   for (const item of favouriteList) {
+    console.log(favouriteList);
     htmlCode += `<li class="favouriteShow" data-myid=${item.id} >`;
     htmlCode += `<h2>Name:${item.name}</h2>`;
     if (item.img === null) {
