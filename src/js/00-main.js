@@ -35,6 +35,7 @@ function paintElements(data) {
     const img = eachData.show.image;
     const idData = eachData.show.id;
     const dataElements = eachData.show;
+    const language = eachData.show.language;
     // Metemos los datos en mi nuevo array showsList
     showsList.push({ name: title, img: img, id: idData });
     //Pintamos los datos
@@ -48,6 +49,7 @@ function paintElements(data) {
     }
     htmlCode += `<li class="show " data-myid=${idData} >`;
     htmlCode += `<h2 class="title2">Nombre:${title}</h2>`;
+    htmlCode += `<p>${language}</p>`;
     if (img === null) {
       htmlCode += `<img class="imgList  ${favouriteClass}" src="${imagenDefault}"> `;
     } else {
@@ -59,6 +61,14 @@ function paintElements(data) {
   htmlCode += `</ul>`;
   nameElement.innerHTML = htmlCode;
 }
+
+const logButton = document.querySelector(".js-log");
+
+function handleButtonLog() {
+  console.log(favouriteList.length);
+}
+
+logButton.addEventListener("click", handleButtonLog);
 
 //Con esta función comprobamos si la serie está en favoritos y hacemos el favouriteClass de añadir o quitar la clase
 function isShowsFavourites(dataElements) {
