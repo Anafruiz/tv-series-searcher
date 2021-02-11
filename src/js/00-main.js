@@ -63,6 +63,7 @@ function paintElements() {
   htmlCode += `</ul>`;
   nameElement.innerHTML = htmlCode;
   listenShowsEvents();
+  listenFav();
 }
 
 //Con esta función comprobamos si la serie está en favoritos y hacemos el favouriteClass de añadir o quitar la clase
@@ -70,7 +71,6 @@ function isShowsFavourites(dataElements) {
   const favoriteFound = favouriteList.find((favorite) => {
     return favorite.id === dataElements.id;
   });
-  console.log(favoriteFound);
   if (favoriteFound === undefined) {
     return false;
   } else {
@@ -120,9 +120,10 @@ function paintFavoritesShow() {
 
   htmlCode += `<ul>`;
   for (const item of favouriteList) {
-    console.log(favouriteList);
     htmlCode += `<li class="favouriteShow" data-myid=${item.id} >`;
-    htmlCode += `<h2>Name:${item.name}</h2>`;
+    htmlCode += `<h2>Name:${item.name}`;
+    htmlCode += ` <button class="removeButton js-removeButton">Remove</button>`;
+    htmlCode += `</h2>`;
     if (item.img === null) {
       htmlCode += `<img src="${imagenDefault}">`;
     } else {
@@ -154,11 +155,37 @@ function getFromLocalStorage() {
 }
 
 getFromLocalStorage();
+listenFav();
 
 //Boton de Reset para borrar la lista de favoritos.
 
 function resetFavButton() {
   favouriteList = [];
+  paintFavoritesShow();
+  paintElements();
+}
+
+function listenFav() {
+  const removeButtons = document.querySelectorAll(".js-removeButton");
+
+  for (const removeButton of removeButtons) {
+    removeButton.addEventListener("click", handleFav);
+  }
+}
+function handleFav(ev) {
+  const clickedId = parseInt(ev.currentTarget.dataset.myid);
+  console.log(clickedId);
+
+  const showFound = favouriteList.findIndex(function (show) {
+    return show.id === clickedId;
+  });
+  if (showFound === -1) {
+    favouriteList.splice(showFound);
+  } /*  else {
+    favouriteList.splice(showFound, 1);
+  } */
+
+  setInLocalStorage();
   paintFavoritesShow();
   paintElements();
 }
