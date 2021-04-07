@@ -36,13 +36,6 @@ let imagenDefault = "https://via.placeholder.com/210x295/ffffff/666666/?";
 function paintElements() {
   let htmlCode = "";
   htmlCode += `<ul>`;
-  showsList = [];
-  // for (const eachData of data) {
-  //   const title = eachData.show.name;
-  //   const img = eachData.show.image;
-  //   const idData = eachData.show.id;
-  //   const dataElements = eachData.show;
-  //   const language = eachData.show.language;
   for (const eachData of showsList) {
     const title = eachData.name;
     const img = eachData.img;
@@ -59,7 +52,6 @@ function paintElements() {
     }
     htmlCode += `<li class="show " data-myid=${idData} >`;
     htmlCode += `<h2 class="title2">Nombre:${title}</h2>`;
-    htmlCode += `<p>${language}</p>`;
     if (img === null) {
       htmlCode += `<img class="imgList  ${favouriteClass}" src="${imagenDefault}"> `;
     } else {
@@ -73,14 +65,6 @@ function paintElements() {
   listenShowsEvents();
   listenFav();
 }
-
-const logButton = document.querySelector(".js-log");
-
-function handleButtonLog() {
-  console.log(favouriteList.length);
-}
-
-logButton.addEventListener("click", handleButtonLog);
 
 //Con esta función comprobamos si la serie está en favoritos y hacemos el favouriteClass de añadir o quitar la clase
 function isShowsFavourites(dataElements) {
