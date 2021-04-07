@@ -14,8 +14,15 @@ function getFromApi() {
   fetch(`//api.tvmaze.com/search/shows?q=${titleName}`)
     .then((response) => response.json())
     .then((data) => {
-      paintElements(data);
-      listenShowsEvents();
+      showsList = [];
+      for (const eachData of data) {
+        const title = eachData.show.name;
+        const img = eachData.show.image;
+        const idData = eachData.show.id;
+        // Metemos los datos en mi nuevo array showsList
+        showsList.push({ name: title, img: img, id: idData });
+      }
+      paintElements();
       setInLocalStorage();
     });
 }
@@ -26,23 +33,26 @@ function handleForm(ev) {
 formElement.addEventListener("submit", handleForm);
 //Pintamos los datos, pero para conseguir los datos hay que iterar el array data para conseguir la propiedad que estamos buscando
 let imagenDefault = "https://via.placeholder.com/210x295/ffffff/666666/?";
-function paintElements(data) {
+function paintElements() {
   let htmlCode = "";
   htmlCode += `<ul>`;
   showsList = [];
-  for (const eachData of data) {
-    const title = eachData.show.name;
-    const img = eachData.show.image;
-    const idData = eachData.show.id;
-    const dataElements = eachData.show;
-    const language = eachData.show.language;
+  // for (const eachData of data) {
+  //   const title = eachData.show.name;
+  //   const img = eachData.show.image;
+  //   const idData = eachData.show.id;
+  //   const dataElements = eachData.show;
+  //   const language = eachData.show.language;
+  for (const eachData of showsList) {
+    const title = eachData.name;
+    const img = eachData.img;
+    const idData = eachData.id;
     // Metemos los datos en mi nuevo array showsList
-    showsList.push({ name: title, img: img, id: idData });
     //Pintamos los datos
     //Primero, llamamos a la función para ver si la peli está en favorito. Si está en favoritos añadimos la clase del borde y si no está, no se la ponemos.
 
     let favouriteClass;
-    if (isShowsFavourites(dataElements)) {
+    if (isShowsFavourites(eachData)) {
       favouriteClass = "backstyle";
     } else {
       favouriteClass = "";
@@ -60,6 +70,8 @@ function paintElements(data) {
   }
   htmlCode += `</ul>`;
   nameElement.innerHTML = htmlCode;
+  listenShowsEvents();
+  listenFav();
 }
 
 const logButton = document.querySelector(".js-log");
@@ -75,7 +87,6 @@ function isShowsFavourites(dataElements) {
   const favoriteFound = favouriteList.find((favorite) => {
     return favorite.id === dataElements.id;
   });
-  console.log(favoriteFound);
   if (favoriteFound === undefined) {
     return false;
   } else {
@@ -112,6 +123,7 @@ function handleShows(ev) {
 
   setInLocalStorage();
   paintFavoritesShow();
+  paintElements();
 }
 
 const favoriteElements = document.querySelector(".js-favourite--shows");
@@ -124,9 +136,10 @@ function paintFavoritesShow() {
 
   htmlCode += `<ul>`;
   for (const item of favouriteList) {
-    console.log(favouriteList);
     htmlCode += `<li class="favouriteShow" data-myid=${item.id} >`;
-    htmlCode += `<h2>Name:${item.name}</h2>`;
+    htmlCode += `<h2>Name:${item.name}`;
+    htmlCode += ` <button class="removeButton js-removeButton">Remove</button>`;
+    htmlCode += `</h2>`;
     if (item.img === null) {
       htmlCode += `<img src="${imagenDefault}">`;
     } else {
@@ -158,10 +171,37 @@ function getFromLocalStorage() {
 }
 
 getFromLocalStorage();
+listenFav();
 
 //Boton de Reset para borrar la lista de favoritos.
 
 function resetFavButton() {
   favouriteList = [];
   paintFavoritesShow();
+  paintElements();
+}
+
+function listenFav() {
+  const removeButtons = document.querySelectorAll(".js-removeButton");
+
+  for (const removeButton of removeButtons) {
+    removeButton.addEventListener("click", handleFav);
+  }
+}
+function handleFav(ev) {
+  const clickedId = parseInt(ev.currentTarget.dataset.myid);
+  console.log(clickedId);
+
+  const showFound = favouriteList.findIndex(function (show) {
+    return show.id === clickedId;
+  });
+  if (showFound === -1) {
+    favouriteList.splice(showFound);
+  } /*  else {
+    favouriteList.splice(showFound, 1);
+  } */
+
+  setInLocalStorage();
+  paintFavoritesShow();
+  paintElements();
 }
