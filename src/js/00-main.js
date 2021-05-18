@@ -35,7 +35,7 @@ formElement.addEventListener("submit", handleForm);
 let imagenDefault = "https://via.placeholder.com/210x295/ffffff/666666/?";
 function paintElements() {
   let htmlCode = "";
-  htmlCode += `<ul>`;
+  htmlCode += `<ul class="ul">`;
   for (const eachData of showsList) {
     const title = eachData.name;
     const img = eachData.img;
@@ -116,13 +116,13 @@ const favoriteElements = document.querySelector(".js-favourite--shows");
 
 function paintFavoritesShow() {
   let htmlCode = "";
-  htmlCode += `<button class="js-reset">Reset <i class="fa fa-trash" aria-hidden="true"></i></button>`;
+  htmlCode += `<button class="js-reset">Eliminar <i class="fa fa-trash" aria-hidden="true"></i></button>`;
 
-  htmlCode += `<ul>`;
+  htmlCode += `<ul class="ul-fav">`;
   for (const item of favouriteList) {
     htmlCode += `<li class="favouriteShow" data-myid=${item.id} >`;
-    htmlCode += `<h2>Name:${item.name}`;
-    htmlCode += ` <button class="removeButton js-removeButton">Remove</button>`;
+    htmlCode += `<h2 class="title2">Name:${item.name}`;
+    htmlCode += ` <button class="removeButton js-removeButton">Quitar</button>`;
     htmlCode += `</h2>`;
     if (item.img === null) {
       htmlCode += `<img src="${imagenDefault}">`;
