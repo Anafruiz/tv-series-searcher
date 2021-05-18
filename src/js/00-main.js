@@ -5,7 +5,7 @@ const inputElement = document.querySelector(".js-input");
 const nameElement = document.querySelector(".js-shows");
 const formElement = document.querySelector(".js-form");
 
-//Cogemos los datos del Api, para ello tenemos que crear una constante con el valor del input para coger los datos del api dependiendo del titulo de la serie q introduzca la usuaria
+//Cogemos los datos del Api, para ello tenemos que crear una constante con el valor del input para coger los datos del api dependiendo del titulo de la serie q introduzca la usuaria//
 let showsList = [];
 let favouriteList = [];
 
